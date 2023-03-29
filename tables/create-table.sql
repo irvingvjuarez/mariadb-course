@@ -31,3 +31,33 @@ CREATE TABLE IF NOT EXISTS `lines`(
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS locations(
+    id INT NOT NULL AUTO_INCREMENT,
+    station_id INT NOT NULL,
+    `location` POINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS `stations`(
+    id INT NOT NULL AUTO_INCREMENT,
+    line_id INT(2) UNSIGNED NOT NULL,
+    location_id INT NOT NULL,
+    `number` INT NOT NULL,
+    color VARCHAR(20) NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY(line_id) REFERENCES `lines`(id),
+    FOREIGN KEY(location_id) REFERENCES locations(id)
+);
+
+CREATE TABLE IF NOT EXISTS lines_stations(
+    line_id INT(2) UNSIGNED NOT NULL,
+    station_id INT NOT NULL,
+    FOREIGN KEY(line_id) REFERENCES `lines`(id),
+    FOREIGN KEY(station_id) REFERENCES stations(id),
+    PRIMARY KEY(line_id, station_id)
+);
